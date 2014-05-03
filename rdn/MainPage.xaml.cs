@@ -118,7 +118,7 @@ namespace rdn
         private static void HandleResponse(WebResponse response)
         {
             // The caller will not call Dispose, so put in using() ourselves.
-            using (var _response = (HttpWebResponse)response)
+            using (var _response = response)
             {
                 var good = false;
                 // Hopefully this came from an HTTP request?

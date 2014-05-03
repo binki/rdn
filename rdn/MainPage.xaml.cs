@@ -78,7 +78,7 @@ namespace rdn
                                 if (ex.Response != null)
                                     HandleResponse(ex.Response);
                                 else
-                                    MessageBox.Show(ex.Response.ToString());
+                                    ShowMessageAsynchronously(ex.Response.ToString());
                                 // Don’t try to call req.BeginGetResponse() *now*, heh.
                                 return;
                             }
@@ -96,10 +96,8 @@ namespace rdn
                                             HandleResponse(ex.Response);
                                         else
                                             // ex.ToString() might be used to give the user information, like hostname unresolvable, etc.. Basically anything where we didn’t manage to get a response at all from the sserver.
-                                            MessageBox.Show(ex.ToString());
+                                        ShowMessageAsynchronously(ex.ToString());
                                     }
-                                   // var something = req.EndGetResponse(_ar);
-                                  //  MessageBox.Show("Something went wrong");
                             }, null);
                         }, null);
 
@@ -115,7 +113,7 @@ namespace rdn
         /// <summary>
         ///   We will handle, interact with the user about, and call Dispose() on response for you.
         /// </summary>
-        private static void HandleResponse(WebResponse response)
+        private void HandleResponse(WebResponse response)
         {
             // The caller will not call Dispose, so put in using() ourselves.
             using (var _response = response)
@@ -133,12 +131,15 @@ namespace rdn
                     // See if we can find <hash><error/></hash> and the textcontent of <error/>.
                     using (var reader = XmlReader.Create(response.GetResponseStream()))
                         if (reader.ReadToFollowing("error"))
-                            MessageBox.Show(reader.ReadElementContentAsString());
+                            ShowMessageAsynchronously(reader.ReadElementContentAsString());
                 }
             }
         }
 
-
+        private void ShowMessageAsynchronously(string message)
+        {
+            Dispatcher.BeginInvoke(() => MessageBox.Show(message));
+        }
 
             // Sample code for building a localized ApplicationBar
             //private void BuildLocalizedApplicationBar()
@@ -155,6 +156,6 @@ namespace rdn
             //    ApplicationBarMenuItem appBarMenuItem = new ApplicationBarMenuItem(AppResources.AppBarMenuItemText);
             //    ApplicationBar.MenuItems.Add(appBarMenuItem);
             //}
-        }
     }
+}
     

@@ -45,7 +45,7 @@ namespace rdn
 
 
                 var statusText = statusbox.Text;
-                var req = WebRequest.Create("http://rainbowdash.net/api/statuses/update.xml");
+                var req = WebRequest.Create("https://secure.rainbowdash.net/api/statuses/update.xml");
                 req.Method = "POST";
                 req.ContentType = "application/x-www-form-urlencoded";
 
